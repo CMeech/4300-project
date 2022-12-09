@@ -1,0 +1,1738 @@
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async def get
+_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+
+
+
+
+
+
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
+import asyncio
+import datetime
+import json
+import logging
+
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from project_source.common.commands import Command, parse_command
+from project_source.common.constants import COMMAND, INVALID
+
+from project_source.common.messages import CLIENTS, HELP, INPUT_PROMPT, INVALID_COMMAND
+from project_source.common.response_keys import CLIENT_LIST
+
+
+async def run_client(client: RSocketClient):
+    input_text = input(INPUT_PROMPT)
+    while input_text != Command.QUIT:
+        cmd_data = parse_command(input_text)
+        # only create a new thread if we're actually sending a request
+        if cmd_data[COMMAND] == Command.HELP:
+            print(HELP)
+        elif cmd_data[COMMAND] != INVALID:
+            task = asyncio.create_task(do_command(client, cmd_data))
+            await task
+        else:
+            print(INVALID_COMMAND)
+
+        input_text = input(INPUT_PROMPT)
+
+# we could use mocks to test this...
+async def do_command(client: RSocketClient, data):
+    try:
+        if data[COMMAND] == Command.LIST:
+            await get_client_list(client)
+            pass
+        elif data[COMMAND] == Command.SEND:
+            pass
+        elif data[COMMAND] == Command.AUTOMATE:
+            pass
+
+        # good for debug
+        #logging.info('Response: {}'.format(None))
+    except asyncio.CancelledError:
+        pass
+
+async def get_client_list(client: RSocketClient):
+    request_data = {
+        COMMAND: Command.LIST
+    }
+    payload = Payload(json.dumps(request_data))
+
+    # Returns a list of client names
+    result = await client.request_response(payload)
+    print_client_list(result[CLIENT_LIST])
+
+def print_client_list(client_list):
+    print(CLIENTS)
+    for client_name in client_list:
+        print("%s\n", client_name)
+    print("")
