@@ -4,9 +4,9 @@ import unittest
 from project_source.client_module.client_streams import ClientDownloadPublisher, ClientDownloadSubscriber, ClientUploadSubscriber
 from reactivestreams.subscriber import DefaultSubscriber
 from reactivestreams.publisher import DefaultPublisher
-from project_source.common.constants import CHUNK_CAP, ENCODE_TYPE
+from project_source.common.constants import BEGIN, CHUNK_CAP, ENCODE_TYPE, MESSAGE
 
-from project_source.common.helpers import create_byte_payload
+from project_source.common.helpers import create_byte_payload, parse_payload
 
 # used so we track the control flow
 # the actual publishers just send data via socket
@@ -17,7 +17,9 @@ class MockClientDownloadPublisher(DefaultPublisher):
         self.completed = False
 
     def begin(self, value):
-        self.started = value.data == None
+        parsed = parse_payload(value)
+        if parsed == {MESSAGE: BEGIN}:
+            self.started = True
     
     def error(self, error):
         self.error_occurred = True
@@ -94,7 +96,6 @@ class TestClientStreams(unittest.TestCase):
             download_subscriber.on_next("test")
             self.assertTrue(download_publisher.error_occurred)
             self.assertFalse(download_publisher.completed)
-            self.assertIsNotNone(download_subscriber.error)
             self.assertTrue(complete.is_set())
 
             # receiving more data should do nothing, will log the error again.

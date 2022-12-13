@@ -175,7 +175,7 @@ class ClientDownloadSubscriber(DefaultSubscriber):
         if self.file_writer:
             self.file_writer.close()
         self.complete_event.set()
-        #self.error = exception
+        self.error = exception
         self.publisher.error(exception)
 
 
