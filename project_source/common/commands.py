@@ -1,3 +1,11 @@
+#
+# commands.py
+#
+# AUTHOR: Cassius Meeches
+#
+# PURPOSE: Specifies the commands that the user can provide
+# to the CLI.
+#
 from enum import Enum
 
 from project_source.common.constants import (
@@ -16,6 +24,7 @@ from project_source.common.constants import (
 )
 
 
+# Specifies the possible commands
 class Command(str, Enum):
     AUTOMATE="automate"
     DELETE="delete"
@@ -29,6 +38,8 @@ class Command(str, Enum):
     REVOKE="revoke"
     UPLOAD="upload"
 
+
+# Specifies the number of arguments for each command.
 COMMAND_LENGTHS = {
     Command.AUTOMATE: 6,
     Command.DELETE: 2,
@@ -43,16 +54,27 @@ COMMAND_LENGTHS = {
 
 INVALID_LENGTH = -1
 
-# Get the appropriate request data for a command
+#
+# parse_command
+#
+# PURPOSE: For a given line of input, parses the command
+# and creates the corresponding request data to be sent
+# to the server.
+# 
+# PARAMS:
+# input_line - text obtained from the user
+# username - name of the current user
+#
 def parse_command(input_line: str, username: str):
-    # use a dictionary to store the len of tokens for each command
     tokens = input_line.split()
     message_type = tokens[0] if len(tokens) > 0 else ""
     data = {
         MESSAGE: message_type
     }
+    # verify the number of arguments
     length = get_command_length(message_type)
 
+    # see the 'help' command for the syntax of commands.
     if message_type == Command.AUTOMATE and len(tokens) == length:
         data[EXPERIMENT_NAME] = tokens[1]
         data[NUM_TESTS] = tokens[2]

@@ -1,6 +1,15 @@
+#
+# messages.py
+#
+# AUTHOR: Cassius Meeches
+#
+# PURPOSE: Specifies messages used to provide information to
+# a client via the CLI or logs.
+#
 ACCESS_DENIED="\nAccess Denied."
 ACCESS_GRANTED="\nAccess granted to user {}."
 ACCESS_REVOKED="\nAccess revoked for user {}."
+AUTOMATE_ERROR="\nFailed to write the data to a CSV file."
 BENCHMARK="Benchmark -> Chunk Size: {}, Number of Chunks: {}, Time: {}."
 CHUNK_RECEIVED="Received the chunk: {}"
 CHUNK_SENT="Sent the chunk: {}"

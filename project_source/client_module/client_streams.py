@@ -1,3 +1,17 @@
+#
+# client_streams.py
+#
+# AUTHOR: Cassius Meeches
+#
+# PURPOSE: Implements the channel stream classes
+# for uploading and downloading files on the client
+# side.
+#
+# --- About RSocket streams ----
+# on_next is the handler for application data messages.
+# on_error is the handler for error messages.
+# on_complete is the handler for complete messages.
+#
 import asyncio
 import logging
 import os
@@ -7,12 +21,17 @@ from reactivestreams.subscription import Subscription
 from reactivestreams.subscriber import DefaultSubscriber
 from reactivestreams.publisher import DefaultPublisher
 from rsocket.payload import Payload
-from project_source.common.constants import BEGIN, CHUNK_CAP, CLIENT_MODULE, COMPLETE, ENCODE_TYPE, FILENAME_TEMPLATE, FILES_DIR, MESSAGE, PROJECT_SRC, SUBSCRIPTION, WRITE_BYTES
-from project_source.common.helpers import create_payload, parse_byte_payload, parse_payload
+from project_source.common.constants import BEGIN, CHUNK_CAP, CLIENT_MODULE, FILENAME_TEMPLATE, FILES_DIR, MESSAGE, PROJECT_SRC, SUBSCRIPTION, WRITE_BYTES
+from project_source.common.helpers import create_payload, parse_byte_payload
 
-from project_source.common.messages import CHUNK_RECEIVED, DOWNLOADING, FILE_UPLOADED, SENDING_PENDING
+from project_source.common.messages import CHUNK_RECEIVED, DOWNLOADING, SENDING_PENDING
 
 
+#
+# ClientUploadPublisher
+#
+# PURPOSES: Pushes bytes of a file to the server
+#
 class ClientUploadPublisher(DefaultPublisher):
         def upload_bytes(self, value):
             self._subscriber.on_next(value)
@@ -25,9 +44,15 @@ class ClientUploadPublisher(DefaultPublisher):
             self._subscriber.on_complete()
 
 
-# Used to receive messages from the server indicatating ready or complete.
+#
+# ClientUploadSubscriber
+#
+# PURPOSE: Receives messages from the server indicating
+# if the server is ready to receive data or complete.
+#
 class ClientUploadSubscriber(DefaultSubscriber):
     def __init__(self, established_event: asyncio.Event, complete_event: asyncio.Event):
+        # used by the client to check if data can be sent
         self.established_event = established_event
         self.complete_event = complete_event
         self.error = None
@@ -43,7 +68,9 @@ class ClientUploadSubscriber(DefaultSubscriber):
 
 
     def on_next(self, value: bytes, is_complete=False):
-        # this is how we indicate the server is ready to receive
+        # this is how the server tells the client to send data.
+        # we don't care what the server sends as long as we
+        # get a non-error message back.
         self.established_event.set()
         if is_complete:
             self.complete_event.set()
@@ -57,7 +84,12 @@ class ClientUploadSubscriber(DefaultSubscriber):
         self.complete_event.set()
 
 
-# Indicates to the server that we are ready for downloading
+#
+# ClientDownloadPublisher
+#
+# PURPOSE: Indicates to the server that we are ready to
+# receive data.
+#
 class ClientDownloadPublisher(DefaultPublisher):
     def begin(self, value: Payload):
         self._subscriber.on_next(value)
@@ -71,7 +103,20 @@ class ClientDownloadPublisher(DefaultPublisher):
         self._subscriber.on_complete()
 
 
-# Stores the downloaded bytes
+#
+# ClientDownloadSubscriber
+#
+# PURPOSE: Receives data from the server and stores
+# it in a file.
+#
+# PARAMS:
+# automated - indicates if the we are running the download
+#   for automated benchmarks. If so, no real data is written.
+# owner - name of the file owner
+# filename - name of the file tobe downloaded
+# publisher - stream for sending data to the server
+# complete_event - used to wait for complete message from the server
+#
 class ClientDownloadSubscriber(DefaultSubscriber):
     def __init__(self, owner, filename, publisher, complete_event: asyncio.Event, automated: bool):
         self.completed = False
@@ -85,6 +130,7 @@ class ClientDownloadSubscriber(DefaultSubscriber):
         self.filename: str = filename
         self.owner: str = owner
         try:
+            # try to open the flie, signal error if one occurs
             root_path = Path(os.getcwd()).resolve().parent
             file_path = os.path.join(root_path, PROJECT_SRC, CLIENT_MODULE, FILES_DIR, FILENAME_TEMPLATE.format(owner, filename))
             self.file_writer = open(file_path, WRITE_BYTES)
@@ -97,6 +143,7 @@ class ClientDownloadSubscriber(DefaultSubscriber):
             self.error = e
 
 
+    # this takes received data and writes it to the file.
     def on_next(self, value: Payload, is_complete=False):
         if is_complete:
             self.on_complete()

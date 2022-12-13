@@ -1,8 +1,12 @@
 #
+# server_handler.py
 #
+# AUTHOR: Cassius Meeches
 #
-
-import json
+# PURPOSE: Implements the class that parses
+# client messages and determines what to do
+# afterwards.
+#
 from typing import Optional, Tuple
 
 
@@ -39,6 +43,11 @@ from project_source.server_module.server_streams import (
 )
 
 
+#
+# ServerHandler
+#
+# PURPOSE: Implements the server handling logic.
+#
 class ServerHandler(BaseRequestHandler):
     def __init__(self, file_service=None, user_service=None):
         if file_service == None and user_service == None:
@@ -50,6 +59,12 @@ class ServerHandler(BaseRequestHandler):
             self.user_service = user_service
 
 
+    #
+    # request_response
+    #
+    # PURPOSE: Handles requests that require an immediate response.
+    # Sends a single message back to the client.
+    #
     async def request_response(self, payload: Payload) -> Awaitable[Payload]:
         try:
             data_dict = parse_payload(payload)
@@ -87,6 +102,13 @@ class ServerHandler(BaseRequestHandler):
         return create_future(create_payload(message))
     
 
+    #
+    # request_channel
+    #
+    # PURPOSE: Given a request for channel establishment, sets up
+    # two one-way streams (using a Publisher and a Subscriber) for
+    # communication with the client.
+    #
     async def request_channel(self, payload: Payload) -> Tuple[Optional[Publisher], Optional[Subscriber]]:
         data_dict = parse_payload(payload)
         message_type = data_dict[MESSAGE]
@@ -97,12 +119,30 @@ class ServerHandler(BaseRequestHandler):
             return self.send_file_to_client(data_dict)
 
 
+    #
+    # get_file_from_client
+    #
+    # PURPOSE: Sets up streams for receiving a file from the
+    # client.
+    #
+    # PARAM:
+    # data - the data from the client's request
+    #
     def get_file_from_client(self, data) -> Tuple[Optional[Publisher], Optional[Subscriber]]:
         publisher = ServerUploadPublisher()
         subscriber = ServerUploadSubscriber(data[OWNER], data[FILENAME], publisher, self.file_service)
         return (publisher, subscriber)
 
 
+    #
+    # send_file_to_client
+    #
+    # PURPOSE: Sets up the streams required for sending
+    # a file to a client.
+    #
+    # PARAM:
+    # data - the data from the client's request
+    #
     def send_file_to_client(self, data) -> Tuple[Optional[Publisher], Optional[Subscriber]]:
         publisher = ServerDownloadPublisher()
         subscriber = ServerDownloadSubscriber(
@@ -116,6 +156,15 @@ class ServerHandler(BaseRequestHandler):
         return (publisher, subscriber)
 
 
+    #
+    # send_client_list
+    #
+    # PURPOSE: Sends the list of clients in the system
+    # to the client.
+    #
+    # PARAM:
+    # data - the data from the client's request
+    #
     def send_client_list(self):
         clients = self.user_service.get_client_list()
         return {
@@ -124,6 +173,15 @@ class ServerHandler(BaseRequestHandler):
         }
 
 
+    #
+    # register_user
+    #
+    # PURPOSE: Registers the client and returns a
+    # status message.
+    #
+    # PARAM:
+    # data - the data from the client's request
+    #
     def register_user(self, data):
         username = sanitize_alphanumeric(data[USERNAME])
         self.user_service.get_or_create(username)
@@ -132,6 +190,15 @@ class ServerHandler(BaseRequestHandler):
         }
 
 
+    #
+    # send_files_list
+    #
+    # PURPOSE: Responds with the list of files that
+    # the client has access to.
+    #
+    # PARAM:
+    # data - the data from the client's request
+    #
     def send_files_list(self, data):
         username = data[USERNAME]
         files = self.file_service.list_files(username)
@@ -141,6 +208,14 @@ class ServerHandler(BaseRequestHandler):
         }
 
 
+    #
+    # grant_access
+    #
+    # PURPOSE: Grants the client access to a specific file.
+    #
+    # PARAM:
+    # data - the data from the client's request
+    #
     def grant_access(self, data):
         status = SUCCESS
         filename = data[FILENAME]
@@ -156,6 +231,14 @@ class ServerHandler(BaseRequestHandler):
         }
 
 
+    #
+    # revoke_access
+    #
+    # PURPOSE: Revokes the client access from a specific file.
+    #
+    # PARAM:
+    # data - the data from the client's request
+    #
     def revoke_access(self, data):
         filename = data[FILENAME]
         owner = data[OWNER]
@@ -168,6 +251,14 @@ class ServerHandler(BaseRequestHandler):
         }
 
 
+    #
+    # delete_file
+    #
+    # PURPOSE: Deletes a client's file.
+    #
+    # PARAM:
+    # data - the data from the client's request
+    #
     def delete_file(self, data):
         filename = data[FILENAME]
         owner = data[OWNER]

@@ -1,3 +1,11 @@
+#
+# client.py
+#
+# AUTHOR: Cassius Meeches
+#
+# PURPOSE: Implements the main program for the client
+# application.
+#
 import asyncio
 import logging
 import sys
@@ -12,14 +20,14 @@ def main():
         print(MISSING_ARGS)
         exit()
 
-    # add IP later
+    # parse the arguments
     address = sys.argv[1]
     port = sys.argv[2]
     type = sys.argv[3]
     username = sys.argv[4]
     debug = sys.argv[5]
 
-    # show debug log
+    # create debug log and set stderr to that file.
     if debug == DEBUG:
         logging.basicConfig(filename="client.log", level=logging.DEBUG)
 

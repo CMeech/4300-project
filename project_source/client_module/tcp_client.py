@@ -1,10 +1,14 @@
-
+#
+# tcp_client.py
+#
+# AUTHOR: Cassius Meeches
+#
+# PURPOSE: Implements an RSocket TCP client connection.
+#
 import asyncio
 import logging
 
 from project_source.client_module.client_task import run_client
-from project_source.common.constants import LOCALHOST
-from reactivestreams.subscriber import DefaultSubscriber
 from rsocket.helpers import single_transport_provider
 from rsocket.rsocket_client import RSocketClient
 from rsocket.transports.tcp import TransportTCP
@@ -12,6 +16,12 @@ from rsocket.transports.tcp import TransportTCP
 from project_source.common.messages import CONNECTING
 
 
+#
+# TCPClient
+#
+# PURPOSE: Initializes a socket using TCP and runs the file
+# transfer application on top of it.
+#
 class TCPClient:
 
     async def connect(self, address: str, server_port: int, username: str):

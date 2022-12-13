@@ -1,3 +1,11 @@
+#
+# experiment.py
+#
+# AUTHOR: Cassius Meeches
+#
+# PURPOSE: Implements an object that stores multiple
+# download benchmarks and writes the results to a csv file.
+#
 import logging
 import os
 from pathlib import Path
@@ -24,7 +32,7 @@ class Experiment():
         self.entries = []
         self.error: Exception = None
 
-        # open the file writer
+        # open the file writer, indicate if errors occur
         try:
             root_path = Path(os.getcwd()).resolve().parent
             file_path = os.path.join(
@@ -52,6 +60,12 @@ class Experiment():
         self.entries.append(entry)
 
 
+    #
+    # save_to_csv
+    #
+    # PURPOSE: Writes the benchmark info to a CSV file.
+    # Each benchmarks is written to its own row.
+    #
     def save_to_csv(self):
         if self.error == None:
             try:
@@ -62,5 +76,6 @@ class Experiment():
             except Exception as e:
                 print(EXPERIMENT_SAVE_ERROR)
                 logging.error(e)
+                self.error = e
             finally:
                 self.file_writer.close()

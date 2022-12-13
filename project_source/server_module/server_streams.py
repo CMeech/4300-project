@@ -1,5 +1,16 @@
 #
+# server_streams.py
 #
+# AUTHOR: Cassius Meeches
+#
+# PURPOSE: Implements the channel stream classes
+# for uploading and downloading files on the server
+# side.
+#
+# --- About RSocket streams ----
+# on_next is the handler for application data messages.
+# on_error is the handler for error messages.
+# on_complete is the handler for complete messages.
 #
 
 import logging
@@ -37,6 +48,7 @@ class AccessDeniedException(Exception):
         pass
 
 
+# For communicating with the client who is sending the file.
 class ServerUploadPublisher(DefaultPublisher):
     def complete(self):
         self._subscriber.on_complete()
@@ -46,6 +58,19 @@ class ServerUploadPublisher(DefaultPublisher):
         self._subscriber.on_error(exception)
 
 
+#
+# ServerUploadSubscriber
+#
+# PURPOSE: Receives data from the client and stores
+# it in a file.
+#
+# PARAMS:
+# username - owner of the file
+# filename - name of the file to be downloaded
+# publisher - stream for sending data to the server
+# file_service - service for getting and creating
+#   file data in the database
+#
 class ServerUploadSubscriber(DefaultSubscriber):
     def __init__(self, username, filename, publisher, file_service):
         self.error = None
@@ -70,6 +95,7 @@ class ServerUploadSubscriber(DefaultSubscriber):
             self.file_writer = None
 
 
+    # this takes received data and writes it to the file.
     def on_next(self, value: bytes, is_complete=False):
         if is_complete:
             self.on_complete()
@@ -108,6 +134,11 @@ class ServerUploadSubscriber(DefaultSubscriber):
         print(FILE_CREATED.format(self.filename))
 
 
+#
+# ServerDownloadPublisher
+#
+# PURPOSES: Pushes bytes of a file to a client
+#
 class ServerDownloadPublisher(DefaultPublisher):
     def complete(self):
         self._subscriber.on_complete()
@@ -121,6 +152,21 @@ class ServerDownloadPublisher(DefaultPublisher):
         self._subscriber.on_error(exception)
 
 
+#
+# ServerDownloadSubscriber
+#
+# PURPOSE: Listens for requests from the client to determine
+# when to send file data. Also reads the file to be sent.
+#
+# PARAMS:
+# user - user to whom we are sending the file
+# owner - name of the file owner
+# filename - name of the file tobe downloaded
+# publisher - stream for sending data to the server
+# chunk_size - size of the chunks to be sent to the user
+# file_service - service used to get info about the requested
+#                file
+#
 class ServerDownloadSubscriber(DefaultSubscriber):
     def __init__(self, user, owner, filename, publisher, chunk_size, file_service):
         self.chunk_size = chunk_size
@@ -153,14 +199,15 @@ class ServerDownloadSubscriber(DefaultSubscriber):
             return
         if self.error == None:
             try:
+                # send the file
                 chunk = self.file_reader.read(self.chunk_size)
                 while chunk:
                     logging.info(CHUNK_SENT.format(chunk))
                     self.publisher.upload_bytes(create_byte_payload(chunk))
                     chunk = self.file_reader.read(self.chunk_size)
 
+                # send complete messages
                 self.publisher.upload_bytes(create_byte_payload(COMPLETE.encode(ENCODE_TYPE)), True)
-
                 self.publisher.complete()
             except Exception as e:
                 self.on_error(e)
@@ -174,6 +221,7 @@ class ServerDownloadSubscriber(DefaultSubscriber):
         if self.file_reader != None:
             self.file_reader.close()
         logging.error(exception)
+        # return a message to the user
         self.publisher.error(RuntimeError(message))
 
 

@@ -1,3 +1,11 @@
+#
+# benchmark.py
+#
+# AUTHOR: Cassius Meeches
+#
+# PURPOSE: Implements an object that stores the benchmark
+# info for a file download.
+#
 from project_source.common.messages import BENCHMARK
 
 
@@ -12,6 +20,12 @@ class Benchmark():
     def error(self):
         self.error_occurred = True
 
+    #
+    # to_csv_entry
+    #
+    # PURPOSE: Returns a string in CSV line format containing
+    # the benchmark information.
+    #
     def to_csv_entry(self):
         return f"\n{self.chunk_size},{self.num_chunks},{self.measured_time}"
 

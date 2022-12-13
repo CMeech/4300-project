@@ -1,3 +1,11 @@
+#
+# server.py
+#
+# AUTHOR: Cassius Meeches
+#
+# PURPOSE: Implements the main program for the server
+# application.
+#
 import asyncio
 import logging
 import sys
@@ -7,6 +15,7 @@ from project_source.database.queries import initialize_database
 
 from project_source.server_module.tcp_server import TCPServer
 from project_source.server_module.quic_server import QUICServer
+
 
 def run_quic_server(address: str, server_port: int):
     server = QUICServer()
@@ -35,6 +44,7 @@ def main():
         print(MISSING_ARGS)
         exit()
 
+    # parse the arguments
     address = sys.argv[1]
     port = sys.argv[2]
     type = sys.argv[3]

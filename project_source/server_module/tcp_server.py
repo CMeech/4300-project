@@ -1,3 +1,10 @@
+#
+# tcp_server.py
+#
+# AUTHOR: Cassius Meeches
+#
+# PURPOSE: Implements an RSocket TCP server connection.
+#
 import asyncio
 import logging
 from project_source.common.constants import LOCALHOST
@@ -7,6 +14,13 @@ from project_source.server_module.server_handler import ServerHandler
 from rsocket.rsocket_server import RSocketServer
 from rsocket.transports.tcp import TransportTCP
 
+
+#
+# TCPServer
+#
+# PURPOSE: Initializes a socket using TCP and runs the file
+# transfer server on top of it.
+#
 class TCPServer:
     async def run_server(self, address: str, server_port: int):
         logging.info(SERVING.format(address, server_port))

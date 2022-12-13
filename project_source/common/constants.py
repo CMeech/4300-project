@@ -1,3 +1,10 @@
+#
+# constants.py
+#
+# AUTHOR: Cassius Meeches
+#
+# PURPOSE: Specifies constants that can be used around the application
+#
 BEGIN="BEGIN"
 CHUNK_CAP=4000
 CLIENT_MODULE="client_module"
