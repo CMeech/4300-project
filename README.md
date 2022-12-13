@@ -8,7 +8,9 @@ In this repo, you will find all of the code that was used in my experiment.
 If you want to run the application, download the files by clicking the green "Code" button near the "About" section. Next, click the "Download ZIP" button in the popup menu.
 
 Lastly, follow the instructions in the URL:
-[link]
+
+https://youtu.be/e7I-2GpRhJ4
 
 Watch a demo of the application here:
-[link]
+
+https://youtu.be/Onv691w0woQ
