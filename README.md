@@ -14,3 +14,19 @@ https://youtu.be/e7I-2GpRhJ4
 Watch a demo of the application here:
 
 https://youtu.be/Onv691w0woQ
+
+<h2>Commands</h2>
+
+Once you have the code downloaded and setup, use the following commands.
+
+<h4>Running the client:</h4>
+
+python client.py 192.168.100.119 6568 quic nick debug
+
+<h4>Running the server:</h4>
+
+python server.py 192.168.100.119 6568 quic debug
+
+<h4>Running the unit_tests:</h4>
+
+python -m unittest discover -v
