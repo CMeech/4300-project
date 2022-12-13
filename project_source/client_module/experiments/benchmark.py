@@ -7,10 +7,10 @@ class Benchmark():
         self.num_chunks = num_chunks
         # in seconds
         self.measured_time = measured_time
-        self.error = False
+        self.error_occurred = False
 
     def error(self):
-        self.error = True
+        self.error_occurred = True
 
     def to_csv_entry(self):
         return f"\n{self.chunk_size},{self.num_chunks},{self.measured_time}"

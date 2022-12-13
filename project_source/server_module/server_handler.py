@@ -24,8 +24,8 @@ from project_source.common.constants import (
     SUCCESS,
     USERNAME
 )
-from project_source.common.helpers import parse_payload
-from project_source.common.messages import DATA_ERROR
+from project_source.common.helpers import create_payload, parse_payload
+from project_source.common.messages import DATA_ERROR, INVALID_MESSAGE
 
 from project_source.common.response_keys import CLIENT_LIST, FILE_LIST, STATUS
 from project_source.database.file_service import FileService
@@ -40,9 +40,14 @@ from project_source.server_module.server_streams import (
 
 
 class ServerHandler(BaseRequestHandler):
-    def __init__(self):
-        self.file_service = FileService()
-        self.user_service = UserService()
+    def __init__(self, file_service=None, user_service=None):
+        if file_service == None and user_service == None:
+            self.file_service = FileService()
+            self.user_service = UserService()
+        else:
+            # this will let us inject a file service so we can test
+            self.file_service = file_service
+            self.user_service = user_service
 
 
     async def request_response(self, payload: Payload) -> Awaitable[Payload]:
@@ -67,6 +72,11 @@ class ServerHandler(BaseRequestHandler):
 
             elif message_type == Command.REVOKE:
                 message = self.revoke_access(data_dict)
+            else:
+                message = {
+                    STATUS: ERROR
+                }
+                print(INVALID_MESSAGE)
 
         except Exception:
             message = {
@@ -74,7 +84,7 @@ class ServerHandler(BaseRequestHandler):
             }
             print(DATA_ERROR)
         
-        return create_future(Payload(json.dumps(message).encode(ENCODE_TYPE)))
+        return create_future(create_payload(message))
     
 
     async def request_channel(self, payload: Payload) -> Tuple[Optional[Publisher], Optional[Subscriber]]:

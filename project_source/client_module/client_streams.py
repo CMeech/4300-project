@@ -7,7 +7,7 @@ from reactivestreams.subscription import Subscription
 from reactivestreams.subscriber import DefaultSubscriber
 from reactivestreams.publisher import DefaultPublisher
 from rsocket.payload import Payload
-from project_source.common.constants import CHUNK_CAP, CLIENT_MODULE, COMPLETE, ENCODE_TYPE, FILENAME_TEMPLATE, FILES_DIR, PROJECT_SRC, WRITE_BYTES
+from project_source.common.constants import CHUNK_CAP, CLIENT_MODULE, COMPLETE, ENCODE_TYPE, FILENAME_TEMPLATE, FILES_DIR, PROJECT_SRC, SUBSCRIPTION, WRITE_BYTES
 from project_source.common.helpers import create_payload, parse_byte_payload, parse_payload
 
 from project_source.common.messages import CHUNK_RECEIVED, DOWNLOADING, FILE_UPLOADED, SENDING_PENDING
@@ -36,7 +36,8 @@ class ClientUploadSubscriber(DefaultSubscriber):
     def on_error(self, exception: Exception):
         print(exception)
         self.error = exception
-        self.subscription.cancel()
+        if hasattr(self, SUBSCRIPTION):
+            self.subscription.cancel()
         self.established_event.set()
         self.complete_event.set()
 
@@ -75,7 +76,6 @@ class ClientDownloadSubscriber(DefaultSubscriber):
     def __init__(self, owner, filename, publisher, complete_event: asyncio.Event, automated: bool):
         self.completed = False
         self.error = None
-        self.error_flag: bool = False
         self.file_writer = None
         self.automated: bool = automated
         self.num_chunks: int = 0
@@ -123,12 +123,12 @@ class ClientDownloadSubscriber(DefaultSubscriber):
 
 
     def on_error(self, exception: Exception):
-        self.error_flag = True
         logging.error(exception)
         print(exception)
         if self.file_writer:
             self.file_writer.close()
         self.complete_event.set()
+        self.error = exception
         self.publisher.error(exception)
 
 

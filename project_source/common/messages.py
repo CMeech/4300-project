@@ -63,6 +63,7 @@ upload filename
 quit"""
 INPUT_PROMPT="\nPlease enter a command: (type 'help' for commands)\n"
 INVALID_COMMAND="\nPlease supply a valid command."
+INVALID_MESSAGE="\nInvalid message type received."
 INVALID_USERNAME="That username contains an invalid syntax. Please user letters and numbers only."
 LOGGED_IN="\nLogged in as user {}."
 MISSING_ARGS="Missing arguments. Requires server port, connection type and debug flag"

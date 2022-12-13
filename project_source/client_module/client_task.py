@@ -16,7 +16,6 @@ from project_source.client_module.experiments.experiment import Experiment
 from project_source.common.commands import Command, parse_command
 from project_source.common.constants import (
     CLIENT_MODULE,
-    ENCODE_TYPE,
     FILENAME,
     FILES_DIR,
     LARGE_CHUNK,
