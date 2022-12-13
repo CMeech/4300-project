@@ -132,7 +132,6 @@ class ServerDownloadSubscriber(DefaultSubscriber):
         self.user = user
         self.subscription: Optional[Subscription] = None
         self.publisher: ServerDownloadPublisher = publisher
-
         # make sure we can read the file and that the user has access
         try:
             if self.file_service.has_access(self.filename, self.owner, self.user):

@@ -236,7 +236,7 @@ async def download_file(client: RSocketClient, data, automated: bool = False) ->
     end_time = time.time()
 
     # if successful, note the download latency (in seconds) and throughput (in chunks)
-    if not subscriber.error_flag and subscriber.num_chunks != 0:
+    if not subscriber.error and subscriber.num_chunks != 0:
         print(FILE_DOWNLOADED.format(filename))
         bench = Benchmark(data[SIZE], subscriber.num_chunks, end_time - start_time)
         print(bench)

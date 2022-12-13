@@ -26,7 +26,6 @@ class MockChannelRequester():
         if hasattr(subscriber, "established_event"):
             subscriber.established_event.set()
         subscriber.num_chunks = 100
-        subscriber.error_flag = False
 
 class MockRSocketClient():
     def __init__(self):

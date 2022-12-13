@@ -7,7 +7,7 @@ from reactivestreams.subscription import Subscription
 from reactivestreams.subscriber import DefaultSubscriber
 from reactivestreams.publisher import DefaultPublisher
 from rsocket.payload import Payload
-from project_source.common.constants import CHUNK_CAP, CLIENT_MODULE, COMPLETE, ENCODE_TYPE, FILENAME_TEMPLATE, FILES_DIR, PROJECT_SRC, SUBSCRIPTION, WRITE_BYTES
+from project_source.common.constants import BEGIN, CHUNK_CAP, CLIENT_MODULE, COMPLETE, ENCODE_TYPE, FILENAME_TEMPLATE, FILES_DIR, MESSAGE, PROJECT_SRC, SUBSCRIPTION, WRITE_BYTES
 from project_source.common.helpers import create_payload, parse_byte_payload, parse_payload
 
 from project_source.common.messages import CHUNK_RECEIVED, DOWNLOADING, FILE_UPLOADED, SENDING_PENDING
@@ -117,7 +117,7 @@ class ClientDownloadSubscriber(DefaultSubscriber):
                     self.on_error(e)
             else:
                 # if we get an empty request, we have received OK from the server
-                self.publisher.begin(create_payload({}))
+                self.publisher.begin(create_payload({MESSAGE: BEGIN}))
         else:
             self.on_error(self.error)
 
@@ -128,7 +128,7 @@ class ClientDownloadSubscriber(DefaultSubscriber):
         if self.file_writer:
             self.file_writer.close()
         self.complete_event.set()
-        self.error = exception
+        #self.error = exception
         self.publisher.error(exception)
 
 
