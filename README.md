@@ -21,11 +21,11 @@ Once you have the code downloaded and setup, use the following commands.
 
 <h4>Running the client:</h4>
 
-python client.py 192.168.100.119 6568 quic nick debug
+python client.py [ip] [port] [tcp/quic] [username] [prod/debug]
 
 <h4>Running the server:</h4>
 
-python server.py 192.168.100.119 6568 quic debug
+python server.py [ip] [port] [tcp/quic] [prod/debug]
 
 <h4>Running the unit_tests:</h4>
 
